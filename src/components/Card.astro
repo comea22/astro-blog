@@ -9,7 +9,7 @@ interface Props {
 const { image, title, description, alt = title } = Astro.props;
 ---
 
-<div class="rounded-lg overflow-hidden shadow-md bg-white h-54">
+<div class="rounded-xl overflow-hidden shadow-md bg-white h-54">
 	<img src={image} alt={alt} class="w-full h-36 object-cover" />
 	<div class="p-4">
 		<h3 class="text-lg font-bold text-primary">{title}</h3>
