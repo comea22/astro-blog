@@ -10,6 +10,8 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const categories = ['全部', '前端', '後端', 'UIUX', '心得分享'];
 ---
 
 <!doctype html>
@@ -90,10 +92,22 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<section>
+				<!-- 分類按鈕 -->
+				<div class="flex flex-wrap gap-2 mb-8 justify-center">
+					{categories.map((cat) => (
+						<button
+							class="category-btn px-3 py-1.5 rounded-xl border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors text-center"
+							data-category={cat}
+						>
+							{cat}
+						</button>
+					))}
+				</div>
+
 				<ul>
 					{
 						posts.map((post) => (
-							<li>
+							<li data-category={post.data.category || '未分類'}>
 								<a href={`/blog/${post.id}/`}>
 									{post.data.heroImage && (
 										<Image width={720} height={360} src={post.data.heroImage} alt="" />
@@ -110,5 +124,30 @@ const posts = (await getCollection('blog')).sort(
 			</section>
 		</main>
 		<Footer />
+
+		<script>
+			const buttons = document.querySelectorAll('.category-btn');
+			const posts = document.querySelectorAll('ul li[data-category]');
+
+			buttons[0]?.classList.add('bg-primary', 'text-white');
+
+			buttons.forEach((btn) => {
+				btn.addEventListener('click', () => {
+					const category = btn.getAttribute('data-category');
+
+					buttons.forEach((b) => b.classList.remove('bg-primary', 'text-white'));
+					btn.classList.add('bg-primary', 'text-white');
+
+					posts.forEach((post) => {
+						const postCategory = post.getAttribute('data-category');
+						if (category === '全部' || postCategory === category) {
+							(post as HTMLElement).style.display = '';
+						} else {
+							(post as HTMLElement).style.display = 'none';
+						}
+					});
+				});
+			});
+		</script>
 	</body>
 </html>
