@@ -15,7 +15,7 @@ import { SITE_TITLE } from '../consts';
 		<main>
 			<div class="flex flex-col md:flex-row gap-8 items-center md:items-center">
 				<!-- 左邊：方形圖片 -->
-				<div class="w-48 h-48 flex-shrink-0">
+				<div class="w-40 h-40 md:w-48 md:h-48 flex-shrink-0">
 					<img
 						src="/avatar.webp"
 						alt="個人照片"
@@ -63,10 +63,11 @@ import { SITE_TITLE } from '../consts';
 			<div class="mt-6">
 					<h2 class="text-lg font-bold text-primary mb-4">其他</h2>
 					<ul class="text-gray-dark">
+					<li>具備馬桶維修經驗</li>
 					<li>精通台語，托福 iBT 92 分</li>
-					<li class="flex items-start gap-2 flex-wrap">
-							不怕蟑螂、馬陸、蜈蚣，無法活捉，但可協助消滅。
-							<button class="inline-block px-3 py-1.5 text-sm text-primary rounded-xl border border-gray-200 shadow-md hover:bg-secondary hover:text-white transition-all md:-mt-2 mt-0.5 mb-4">
+					<li>
+							<p>不怕蟑螂、馬陸、蜈蚣，無法活捉，但可協助消滅。</p>
+							<button id="open-modal" class="inline-block px-3 py-1.5 text-sm text-primary rounded-xl border border-gray-200 shadow-md hover:bg-secondary hover:text-white transition-all mt-1.5 cursor-pointer mb-4 md:mb-0">
 								預約滅蟲
 							</button>
 						</li>
@@ -74,5 +75,44 @@ import { SITE_TITLE } from '../consts';
 				</div>
 		</main>
 		<Footer />
+
+		<!-- Modal -->
+		<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80">
+			<div class="relative bg-white rounded-xl shadow-lg py-6 px-8 mx-4 max-w-md text-center">
+				<button id="close-modal" class="absolute top-3 right-3 text-gray hover:text-primary transition-colors cursor-pointer">
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</button>
+				<p class="text-6xl py-6">🦤</p>
+				<p>謝謝你的好奇心，</p>
+				<p>等哪天我被 AI 取代，就會開放此服務！</p>
+				<p>在此先附上折扣碼：<span class="font-bold text-primary">404NOTFOUND</span></p>
+				
+			</div>
+		</div>
+
+		<script>
+			const openBtn = document.getElementById('open-modal');
+			const closeBtn = document.getElementById('close-modal');
+			const modal = document.getElementById('modal');
+
+			openBtn?.addEventListener('click', () => {
+				modal?.classList.remove('hidden');
+				modal?.classList.add('flex');
+			});
+
+			closeBtn?.addEventListener('click', () => {
+				modal?.classList.add('hidden');
+				modal?.classList.remove('flex');
+			});
+
+			modal?.addEventListener('click', (e) => {
+				if (e.target === modal) {
+					modal.classList.add('hidden');
+					modal.classList.remove('flex');
+				}
+			});
+		</script>
 	</body>
 </html>
