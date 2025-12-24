@@ -1,63 +1,78 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<!doctype html>
+<html lang="zh-TW">
+	<head>
+		<BaseHead title={`關於我 | ${SITE_TITLE}`} description="關於我的介紹" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="flex flex-col md:flex-row gap-8 items-center md:items-center">
+				<!-- 左邊：方形圖片 -->
+				<div class="w-48 h-48 flex-shrink-0">
+					<img
+						src="/avatar.webp"
+						alt="個人照片"
+						class="w-full h-full object-cover rounded-full shadow-md"
+					/>
+				</div>
+				<!-- 右邊：文字介紹 -->
+				<div class="flex-1">
+					<h1 class="font-bold text-base text-primary">
+						Hi, it's Jae!
+					</h1>
+					<p>
+						產地艋舺，插畫研究所畢業後轉職網頁開發的小小旅人，希望將所學以插畫的方式整理成有趣的筆記。</p>
+					<a href="mailto:comea22@gmail.com" class="inline-flex items-center gap-1 text-primary hover:text-secondary transition-colors mt-2 underline underline-offset-2">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+						</svg>
+						comea22@gmail.com
+					</a>
+				</div>
+			</div>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
-
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
-
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
-
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+			<!-- 其他資訊區塊 -->
+			<div class="grid grid-cols-1 gap-8 mt-12">
+				<!-- 其他技能 -->
+				<div>
+					<h2 class="text-lg font-bold text-primary mb-4">程式以外的技能</h2>
+					<ul class="text-gray-dark space-y-4">
+						<li>
+							<span class="block font-semibold text-primary">Software</span>
+							Photoshop / Illustrator / Indesign / After Effects / Procreate
+						</li>
+						<li>
+							<span class="block font-semibold text-primary">Design</span>
+							展覽主視覺 / 海報設計 / LOGO 設計 / 包裝設計 / 書籍排版 / 印刷
+						</li>
+						<li>
+							<span class="block font-semibold text-primary">Arts</span>
+							商業插畫 / 兒童繪本 / 手作精裝 / 剪紙 / 刺繡
+						</li>
+					</ul>
+				</div>
+	
+			</div>
+			<div class="mt-6">
+					<h2 class="text-lg font-bold text-primary mb-4">其他</h2>
+					<ul class="text-gray-dark">
+					<li>精通台語，托福 iBT 92 分</li>
+					<li class="flex items-start gap-2 flex-wrap">
+							不怕蟑螂、馬陸、蜈蚣，無法活捉，但可協助消滅。
+							<button class="inline-block px-3 py-1.5 text-sm text-primary rounded-xl border border-gray-200 shadow-md hover:bg-secondary hover:text-white transition-all md:-mt-2 mt-0.5 mb-4">
+								預約滅蟲
+							</button>
+						</li>
+					</ul>
+				</div>
+		</main>
+		<Footer />
+	</body>
+</html>
