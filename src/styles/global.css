@@ -74,9 +74,7 @@ strong,
 b {
 	font-weight: 700;
 }
-p {
-	margin-bottom: 1em;
-}
+
 .prose p {
 	margin-bottom: 2em;
 }
@@ -93,7 +91,6 @@ table {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
 }
 code {
 	padding: 2px 5px;
