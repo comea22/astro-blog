@@ -11,7 +11,7 @@ const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-const categories = ['全部', '前端', '後端', 'UIUX', '心得分享'];
+const categories = ['全部', '前端', '後端', 'UIUX', '其他'];
 ---
 
 <!doctype html>
@@ -95,11 +95,26 @@ const categories = ['全部', '前端', '後端', 'UIUX', '心得分享'];
 		<Header />
 		<main>
 			<section>
+				<!-- 搜尋框 -->
+				<div class="max-w-xs mx-auto mb-6">
+					<div class="relative">
+						<input
+							type="text"
+							id="search-input"
+							placeholder="搜尋文章標題"
+							class="bg-white w-full px-4 py-2 pl-10 border border-gray-200 rounded-xl shadow-md focus:outline-none focus:border-primary"
+						/>
+						<svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+						</svg>
+					</div>
+				</div>
+
 				<!-- 分類按鈕 -->
-				<div class="flex flex-wrap gap-2 mb-8 justify-center">
+				<div class="flex flex-wrap gap-2 mb-6 md:mb-8 justify-center">
 					{categories.map((cat) => (
 						<button
-							class="category-btn inline-block px-3 py-1.5 text-primary rounded-xl border border-gray-200 shadow-md hover:bg-secondary hover:text-white hover:shadow-lg transition-all"
+							class="category-btn inline-flex items-center justify-center px-3 py-1.5 bg-white text-primary rounded-xl border border-gray-200 shadow-md hover:bg-secondary hover:text-white hover:shadow-lg transition-all"
 							data-category={cat}
 						>
 							{cat}
@@ -110,7 +125,7 @@ const categories = ['全部', '前端', '後端', 'UIUX', '心得分享'];
 				<ul>
 					{
 						posts.map((post) => (
-							<li data-category={post.data.category || '未分類'}>
+							<li data-category={post.data.category || '未分類'} data-title={post.data.title.toLowerCase()}>
 								<a href={`/blog/${post.id}/`}>
 									{post.data.heroImage && (
 										<Image width={200} height={120} src={post.data.heroImage} alt="" />
@@ -131,6 +146,7 @@ const categories = ['全部', '前端', '後端', 'UIUX', '心得分享'];
 						))
 					}
 				</ul>
+				<p id="no-posts-message" class="hidden text-center text-gray py-8">目前這個類別還沒有文章噢～</p>
 			</section>
 		</main>
 		<Footer />
@@ -138,25 +154,58 @@ const categories = ['全部', '前端', '後端', 'UIUX', '心得分享'];
 		<script>
 			const buttons = document.querySelectorAll('.category-btn');
 			const posts = document.querySelectorAll('ul li[data-category]');
+			const searchInput = document.getElementById('search-input') as HTMLInputElement;
+			const noPostsMessage = document.getElementById('no-posts-message');
 
+			let currentCategory = '全部';
+			let currentSearch = '';
+
+			buttons[0]?.classList.remove('bg-white', 'text-primary');
 			buttons[0]?.classList.add('bg-primary', 'text-white');
+
+			function filterPosts() {
+				let visibleCount = 0;
+
+				posts.forEach((post) => {
+					const postCategory = post.getAttribute('data-category');
+					const postTitle = post.getAttribute('data-title') || '';
+
+					const matchesCategory = currentCategory === '全部' || postCategory === currentCategory;
+					const matchesSearch = currentSearch === '' || postTitle.includes(currentSearch.toLowerCase());
+
+					if (matchesCategory && matchesSearch) {
+						(post as HTMLElement).style.display = '';
+						visibleCount++;
+					} else {
+						(post as HTMLElement).style.display = 'none';
+					}
+				});
+
+				if (visibleCount === 0) {
+					noPostsMessage?.classList.remove('hidden');
+				} else {
+					noPostsMessage?.classList.add('hidden');
+				}
+			}
 
 			buttons.forEach((btn) => {
 				btn.addEventListener('click', () => {
-					const category = btn.getAttribute('data-category');
+					currentCategory = btn.getAttribute('data-category') || '全部';
 
-					buttons.forEach((b) => b.classList.remove('bg-primary', 'text-white'));
+					buttons.forEach((b) => {
+						b.classList.remove('bg-primary', 'text-white');
+						b.classList.add('bg-white', 'text-primary');
+					});
+					btn.classList.remove('bg-white', 'text-primary');
 					btn.classList.add('bg-primary', 'text-white');
 
-					posts.forEach((post) => {
-						const postCategory = post.getAttribute('data-category');
-						if (category === '全部' || postCategory === category) {
-							(post as HTMLElement).style.display = '';
-						} else {
-							(post as HTMLElement).style.display = 'none';
-						}
-					});
+					filterPosts();
 				});
+			});
+
+			searchInput?.addEventListener('input', () => {
+				currentSearch = searchInput.value;
+				filterPosts();
 			});
 		</script>
 	</body>
