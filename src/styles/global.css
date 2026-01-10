@@ -77,6 +77,16 @@ strong,
 b {
 	font-weight: 700;
 }
+@layer base {
+	[role="button"],
+	button {
+		cursor: pointer;
+	}
+
+	:disabled {
+		cursor: default;
+	}
+}
 
 .prose p {
 	margin-bottom: 2em;
