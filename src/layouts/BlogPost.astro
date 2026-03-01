@@ -18,7 +18,8 @@ const { title, description, pubDate, updatedDate, heroImage, wordCount } = Astro
 			main {
 				width: calc(100% - 2em);
 				max-width: 100%;
-				margin: 0;
+				margin: 0 auto;
+				padding-top: 6em;
 			}
 			.hero-image {
 				width: 100%;
@@ -74,6 +75,25 @@ const { title, description, pubDate, updatedDate, heroImage, wordCount } = Astro
 				align-items: center;
 				gap: 0.35em;
 				margin: 0;
+			}
+			@media (max-width: 720px) {
+				main {
+					width: 100%;
+					padding: 6em 0.5em 0;
+				}
+				.prose {
+					padding: 0.5em;
+				}
+				.title h1 {
+					font-size: 1.2em;
+				}
+				.title {
+					margin-bottom: 0;
+					padding: 0.5em 0;
+				}
+				.hero-image img {
+					height: 200px;
+				}
 			}
 		</style>
 	</head>
