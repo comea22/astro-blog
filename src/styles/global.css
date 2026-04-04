@@ -150,10 +150,15 @@ pre > code {
 	all: unset;
 }
 blockquote {
-	border-left: 4px solid var(--accent);
+	border-left: 4px solid var(--color-secondary);
 	padding: 0 0 0 20px;
 	margin: 0;
 	font-size: 1.333em;
+}
+.highlight {
+	background-color: var(--color-secondary);
+	padding: 2px 4px;
+	border-radius: 2px;
 }
 hr {
 	border: none;
