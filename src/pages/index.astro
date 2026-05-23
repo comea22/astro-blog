@@ -1,88 +1,118 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Card from '../components/Card.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('notes'))
+	.filter((post) => !post.data.draft)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+			ul {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.25rem;
+				list-style-type: none;
+				margin: 0 auto;
+				padding: 0;
+			}
+			ul li a {
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+				text-decoration: none;
+				transition: 0.3s ease;
+				background-color: white;
+				border-radius: 12px;
+				overflow: hidden;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			}
+			ul li a:hover {
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+				transform: translateY(-4px);
+			}
+			ul li img {
+				width: calc(100% - 1.5rem);
+				height: 140px;
+				object-fit: cover;
+				border-radius: 8px;
+				margin: 0.75rem auto 0;
+			}
+			.post-content {
+				display: flex;
+				flex-direction: column;
+				padding: 0.75rem;
+				flex: 1;
+			}
+			.title {
+				margin: 0 0 0.5rem 0;
+				color: rgb(var(--black));
+				line-height: 1.3;
+			}
+			.description {
+				margin: 0 0 0.5rem 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.9rem;
+			}
+			.date {
+				margin: 0;
+				margin-top: auto;
+				color: rgb(var(--gray));
+				font-size: 0.85rem;
+			}
+			ul li a:hover .title,
+			ul li a:hover .date {
+				color: var(--color-primary);
+			}
+			@media (max-width: 720px) {
+				ul {
+					grid-template-columns: 1fr;
+					gap: 1rem;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<div class="overflow-hidden rounded-2xl mb-4">
-				<img src="/banner.webp" alt="主視覺" class="w-full" />
-			</div>
-			<h1 class="text-xl md:text-2xl font-semibold text-primary py-4">啟程</h1>
-			<p class="text-lg md:text-xl leading-relaxed">
-				歡迎來到程式散步，我是經營這裡的小旅人 Jae。這裡會分享我在網頁開發上的學習旅程，希望這趟旅途像散步，每一步不必很大，但都能保持自己的步調。
-			</p>
-			<div class="text-right mt-4">
-				<a href="/notes" class="inline-flex items-center gap-0.5 px-4 py-2 md:px-5 md:py-2.5 my-4 text-primary text-base md:text-lg rounded-2xl border border-gray-200 shadow-md hover:bg-secondary hover:text-white hover:shadow-lg transition-all">
-					探索筆記
-					<svg class="w-6 h-6 pb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 17L17 7m0 0H7m10 0v10" />
-					</svg>
-				</a>
-			</div>
-			<h1 class="text-primary text-xl font-semibold py-6 md:py-10 text-center">. . .</h1>
-			<h1 class="text-xl md:text-2xl text-primary font-semibold pb-4">散步地圖</h1>
-			<p class="text-lg md:text-xl">這裡預計會有的筆記主題：</p>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-2 md:mt-4">
-				<a href="/notes?category=前端">
-					<Card
-						image="/01.webp"
-						title="前端"
-						description="JavaScript / Tailwind CSS / React"
-					/>
-				</a>
-				<a href="/notes?category=後端">
-					<Card
-						image="/02.webp"
-						title="後端"
-						description="Ruby / Rails"
-					/>
-				</a>
-				<a href="/notes?category=UIUX">
-					<Card
-						image="/03.webp"
-						title="UIUX"
-						description="介面設計 / 使用者體驗"
-					/>
-				</a>
-				<a href="/notes?category=其他">
-					<Card
-						image="/04.webp"
-						title="其他"
-						description="Git / 心得分享"
-					/>
-				</a>
-			</div>
-			<h1 class="text-primary text-xl font-semibold py-6 md:py-10 text-center">. . .</h1>
-			<h1 class="text-xl md:text-2xl text-primary font-semibold pb-4">許願池</h1>
-			<p class="text-lg md:text-xl leading-relaxed">留下想了解的主題或想說的話，許願不用錢，不論是金願望還是銀願望，有許總是多個機會！</p>
-			<div class="my-2 md:my-6 ">
-				<script is:inline src="https://giscus.app/client.js"
-					data-repo="comea22/astro-blog"
-					data-repo-id="R_kgDOQskEGw"
-					data-category="Announcements"
-					data-category-id="DIC_kwDOQskEG84C0ExV"
-					data-mapping="pathname"
-					data-strict="0"
-					data-reactions-enabled="0"
-					data-emit-metadata="0"
-					data-input-position="bottom"
-					data-theme="light"
-					data-lang="zh-TW"
-					crossorigin="anonymous"
-					async>
-				</script>
-			</div>
-
+			<section>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/notes/${post.id}/`}>
+									{post.data.heroImage && (
+										<Image width={200} height={120} src={post.data.heroImage} alt="" />
+									)}
+									<div class="post-content">
+										<h4 class="title">{post.data.title}</h4>
+										<p class="description">
+											{post.data.description.length > 50
+												? post.data.description.slice(0, 50) + '...'
+												: post.data.description}
+										</p>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</div>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
 		</main>
 		<Footer />
 	</body>
