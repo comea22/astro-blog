@@ -1,10 +1,6 @@
-# Summary
+# Introduction
 
 一邊學習網頁開發，一邊紀錄的小地方。
-
-## Demo
-
-[部落格｜程式散步 A calming walk in web dev](https://blog.yjliang.com)
 
 ## 功能
 
