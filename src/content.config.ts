@@ -11,7 +11,6 @@ const notes = defineCollection({
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.string().optional(),
 			draft: z.boolean().optional(),
-			category: z.string().optional(),
 		}),
 });
 
