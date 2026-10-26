@@ -195,6 +195,59 @@ const categories = [
 			ul li a:hover .date {
 				color: var(--color-primary);
 			}
+			.empty {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 1.25rem;
+				min-height: 420px;
+				padding: 2.5rem;
+				border-radius: 12px;
+				border: 2px dashed rgb(212, 219, 230);
+				text-align: center;
+			}
+			.empty-icon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 88px;
+				height: 88px;
+				border-radius: 999px;
+				background-color: #e1f2f0;
+			}
+			/* 小人在圓圈裡慢慢往右跑，到邊轉身再跑回來 */
+			.runner {
+				animation: run 6s ease-in-out infinite;
+			}
+			@keyframes run {
+				0% {
+					transform: translateX(-25%) scaleX(1);
+				}
+				45% {
+					transform: translateX(25%) scaleX(1);
+				}
+				50% {
+					transform: translateX(25%) scaleX(-1);
+				}
+				95% {
+					transform: translateX(-25%) scaleX(-1);
+				}
+				100% {
+					transform: translateX(-25%) scaleX(1);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.runner {
+					animation: none;
+				}
+			}
+			.empty p {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 1.25rem;
+				font-weight: 700;
+			}
 			@media (max-width: 720px) {
 				.layout {
 					flex-direction: column;
@@ -263,6 +316,22 @@ const categories = [
 				.date {
 					font-size: 0.75rem;
 				}
+				.empty {
+					min-height: 280px;
+					gap: 1rem;
+					padding: 2rem 1.5rem;
+				}
+				.empty-icon {
+					width: 72px;
+					height: 72px;
+				}
+				.empty-icon svg {
+					width: 36px;
+					height: 36px;
+				}
+				.empty p {
+					font-size: 1.0625rem;
+				}
 			}
 		</style>
 	</head>
@@ -327,6 +396,12 @@ const categories = [
 							))
 						}
 					</ul>
+					<div class="empty" id="posts-empty" hidden>
+						<div class="empty-icon">
+							<svg class="runner" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="15" cy="4.5" r="2"/><path d="M13 7.5 11 13"/><path d="M11 13l3 2.5V21"/><path d="M11 13l-2.5 3L5 17.5"/><path d="M12.5 9 9 10l-2 2.5"/><path d="M12.5 9l3.5 2.5 2.5-1"/></svg>
+						</div>
+						<p id="posts-empty-title"></p>
+					</div>
 				</section>
 			</div>
 		</main>
@@ -339,6 +414,8 @@ const categories = [
 	const items = document.querySelectorAll<HTMLLIElement>('li[data-category]');
 	const heading = document.getElementById('posts-heading');
 	const count = document.getElementById('posts-count');
+	const empty = document.getElementById('posts-empty');
+	const emptyTitle = document.getElementById('posts-empty-title');
 
 	buttons.forEach((button) => {
 		button.addEventListener('click', () => {
@@ -354,6 +431,8 @@ const categories = [
 
 			if (heading) heading.textContent = filter === 'all' ? '最新文章' : (filter ?? '');
 			if (count) count.textContent = String(shown);
+			if (empty) empty.hidden = shown > 0;
+			if (emptyTitle) emptyTitle.textContent = `${filter} 的筆記還在路上`;
 		});
 	});
 </script>
