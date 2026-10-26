@@ -12,10 +12,11 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'notes'>;
 
 const post = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const wordCount = post.body.replace(/\s/g, '').length;
 ---
 
-<BlogPost {...post.data} wordCount={wordCount}>
+<BlogPost {...post.data} wordCount={wordCount} headings={toc}>
 	<Content />
 </BlogPost>

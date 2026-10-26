@@ -5,7 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import { CATEGORIES, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { CATEGORIES, CATEGORY_SHORT_LABELS, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import banner from '../assets/banner_v2.webp';
 
 const posts = (await getCollection('notes'))
@@ -13,7 +13,7 @@ const posts = (await getCollection('notes'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const categories = [
-	{ id: 'all', label: 'ALL', count: posts.length },
+	{ id: 'all', label: 'All', count: posts.length },
 	...CATEGORIES.map((category) => ({
 		id: category,
 		label: category,
@@ -58,19 +58,17 @@ const categories = [
 				padding: 0 0.5rem 0 1rem;
 				border: 0;
 				border-radius: 999px;
-				background-color: white;
+				background-color: rgb(244, 246, 249);
 				color: rgb(var(--gray-dark));
 				font: inherit;
 				font-size: 1rem;
 				white-space: nowrap;
-				box-shadow: 0 1px 4px rgba(15, 18, 25, 0.12);
 				transition: 0.2s ease;
 			}
 			.category-btn[aria-pressed='true'] {
 				background-color: var(--color-primary);
 				color: white;
 				font-weight: 700;
-				box-shadow: 0 4px 10px rgba(0, 146, 145, 0.3);
 			}
 			.count {
 				display: flex;
@@ -80,7 +78,7 @@ const categories = [
 				height: 26px;
 				padding: 0 7px;
 				border-radius: 999px;
-				background-color: rgb(236, 240, 245);
+				background-color: white;
 				color: rgb(84, 99, 135);
 				font-size: 0.75rem;
 				font-weight: 700;
@@ -208,10 +206,8 @@ const categories = [
 				}
 				.category-list {
 					flex-direction: row;
+					flex-wrap: wrap;
 					gap: 0.5rem;
-					overflow-x: auto;
-					margin: 0 -1em;
-					padding: 2px 1em 8px;
 				}
 				.category-btn {
 					flex: 0 0 auto;
@@ -227,11 +223,13 @@ const categories = [
 				}
 				ul li a {
 					flex-direction: row;
+					height: 128px;
 				}
 				.thumb {
-					flex: 0 0 104px;
-					width: 104px;
-					height: 84px;
+					flex: 0 0 112px;
+					width: 112px;
+					height: auto;
+					min-height: 84px;
 					margin: 10px 0 10px 10px;
 				}
 				.post-content {
@@ -242,10 +240,21 @@ const categories = [
 					font-size: 0.6875rem;
 				}
 				.title {
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2;
+					line-clamp: 2;
+					overflow: hidden;
 					margin: 0.5rem 0 0.25rem;
 					font-size: 0.9375rem;
+					font-weight: 700;
 				}
 				.description {
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					line-clamp: 1;
+					overflow: hidden;
 					font-size: 0.8125rem;
 				}
 				.meta {
@@ -310,7 +319,7 @@ const categories = [
 												<p class="date">
 													<FormattedDate date={post.data.pubDate} />
 												</p>
-												<span class="tag">{post.data.category}</span>
+												<span class="tag">{CATEGORY_SHORT_LABELS[post.data.category] ?? post.data.category}</span>
 											</div>
 										</div>
 									</a>

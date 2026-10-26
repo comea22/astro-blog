@@ -13,6 +13,7 @@
 	--color-accent: #2337ff;
 	--color-primary: #009291;
 	--color-secondary: #eea0c6;
+	--color-secondary-dark: #d38c9d;
 }
 
 :root {
@@ -102,7 +103,7 @@ b {
 .prose h3 { font-size: 1em; }
 .prose h4 { font-size: 1em; }
 .prose a {
-	color: var(--color-secondary);
+	color: var(--color-secondary-dark);
 	text-decoration: underline;
 }
 .prose p {
