@@ -3,3 +3,4 @@
 
 export const SITE_TITLE = '程式散步｜學習筆記';
 export const SITE_DESCRIPTION = '網頁開發的學習旅程';
+export const CATEGORIES = ['Database', 'Ruby on Rails', 'Frontend'] as const;

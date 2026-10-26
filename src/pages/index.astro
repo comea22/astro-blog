@@ -5,12 +5,21 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { CATEGORIES, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import banner from '../assets/banner_v2.webp';
 
 const posts = (await getCollection('notes'))
 	.filter((post) => !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const categories = [
+	{ id: 'all', label: 'ALL', count: posts.length },
+	...CATEGORIES.map((category) => ({
+		id: category,
+		label: category,
+		count: posts.filter((post) => post.data.category === category).length,
+	})),
+];
 ---
 
 <!doctype html>
@@ -19,14 +28,92 @@ const posts = (await getCollection('notes'))
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			main {
-				width: 960px;
+				width: 1200px;
+			}
+			.layout {
+				display: flex;
+				gap: 2.5rem;
+				align-items: flex-start;
+			}
+			.categories {
+				flex: 0 0 220px;
+			}
+			.categories h2 {
+				margin: 0 0 0.75rem 0;
+				color: rgb(var(--gray));
+				font-size: 0.875rem;
+				letter-spacing: 0.12em;
+			}
+			.category-list {
+				display: flex;
+				flex-direction: column;
+				gap: 0.75rem;
+			}
+			.category-btn {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 0.5rem;
+				min-height: 48px;
+				padding: 0 0.5rem 0 1rem;
+				border: 0;
+				border-radius: 999px;
+				background-color: white;
+				color: rgb(var(--gray-dark));
+				font: inherit;
+				font-size: 1rem;
+				white-space: nowrap;
+				box-shadow: 0 1px 4px rgba(15, 18, 25, 0.12);
+				transition: 0.2s ease;
+			}
+			.category-btn[aria-pressed='true'] {
+				background-color: var(--color-primary);
+				color: white;
+				font-weight: 700;
+				box-shadow: 0 4px 10px rgba(0, 146, 145, 0.3);
+			}
+			.count {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-width: 26px;
+				height: 26px;
+				padding: 0 7px;
+				border-radius: 999px;
+				background-color: rgb(236, 240, 245);
+				color: rgb(84, 99, 135);
+				font-size: 0.75rem;
+				font-weight: 700;
+			}
+			.category-btn[aria-pressed='true'] .count {
+				background-color: white;
+				color: #00706f;
+			}
+			.posts {
+				flex: 1;
+				min-width: 0;
+			}
+			.posts-header {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				margin-bottom: 1.25rem;
+			}
+			.posts-header h1 {
+				margin: 0;
+				font-size: 1.5rem;
+			}
+			.posts-header p {
+				margin: 0;
+				color: rgb(var(--gray));
+				font-size: 0.875rem;
 			}
 			ul {
 				display: grid;
-				grid-template-columns: repeat(3, 1fr);
-				gap: 1.25rem;
+				grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+				gap: 1.5rem;
 				list-style-type: none;
-				margin: 0 auto;
+				margin: 0;
 				padding: 0;
 			}
 			ul li a {
@@ -72,8 +159,26 @@ const posts = (await getCollection('notes'))
 				padding: 0.75rem;
 				flex: 1;
 			}
+			.meta {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 0.5rem;
+				margin-top: auto;
+			}
+			.tag {
+				flex-shrink: 0;
+				padding: 0.25rem 0.625rem;
+				border: 1px solid #9fd3d1;
+				border-radius: 999px;
+				color: #3aa8a7;
+				font-size: 0.75rem;
+				font-weight: 700;
+				line-height: 1.5;
+				white-space: nowrap;
+			}
 			.title {
-				margin: 0 0 0.5rem 0;
+				margin: 0.75rem 0 1.25rem;
 				color: rgb(var(--black));
 				line-height: 1.3;
 			}
@@ -84,7 +189,6 @@ const posts = (await getCollection('notes'))
 			}
 			.date {
 				margin: 0;
-				margin-top: auto;
 				color: rgb(var(--gray));
 				font-size: 0.85rem;
 			}
@@ -93,9 +197,55 @@ const posts = (await getCollection('notes'))
 				color: var(--color-primary);
 			}
 			@media (max-width: 720px) {
+				.layout {
+					flex-direction: column;
+					gap: 1.25rem;
+				}
+				.categories {
+					flex: none;
+					width: 100%;
+				}
+				.category-list {
+					flex-direction: row;
+					gap: 0.5rem;
+					overflow-x: auto;
+					margin: 0 -1em;
+					padding: 2px 1em 8px;
+				}
+				.category-btn {
+					flex: 0 0 auto;
+					min-height: 44px;
+					font-size: 0.875rem;
+				}
+				.posts {
+					width: 100%;
+				}
 				ul {
 					grid-template-columns: 1fr;
-					gap: 1rem;
+					gap: 0.75rem;
+				}
+				ul li a {
+					flex-direction: row;
+				}
+				.thumb {
+					flex: 0 0 104px;
+					width: 104px;
+					height: 84px;
+					margin: 10px 0 10px 10px;
+				}
+				.post-content {
+					padding: 10px 12px;
+				}
+				.tag {
+					padding: 0.125rem 0.5rem;
+					font-size: 0.6875rem;
+				}
+				.title {
+					margin: 0.5rem 0 0.75rem;
+					font-size: 0.9375rem;
+				}
+				.date {
+					font-size: 0.75rem;
 				}
 			}
 		</style>
@@ -103,38 +253,91 @@ const posts = (await getCollection('notes'))
 	<body>
 		<Header />
 		<main>
-			<div class="overflow-hidden rounded-xl mb-4">
+			<div class="overflow-hidden rounded-xl mb-10">
 				<Image src={banner} alt="主視覺" class="w-full" />
 			</div>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/notes/${post.id}/`}>
-									{post.data.heroImage && (
-										<div class="thumb">
-											<Image width={200} height={120} src={post.data.heroImage} alt="" />
+			<div class="layout">
+				<aside class="categories">
+					<h2>文章分類</h2>
+					<div class="category-list">
+						{
+							categories.map((category) => (
+								<button
+									type="button"
+									class="category-btn"
+									data-filter={category.id}
+									aria-pressed={category.id === 'all' ? 'true' : 'false'}
+								>
+									<span>{category.label}</span>
+									<span class="count">{category.count}</span>
+								</button>
+							))
+						}
+					</div>
+				</aside>
+				<section class="posts">
+					<div class="posts-header">
+						<h1 id="posts-heading">最新文章</h1>
+						<p>共 <span id="posts-count">{posts.length}</span> 篇</p>
+					</div>
+					<ul>
+						{
+							posts.map((post) => (
+								<li data-category={post.data.category}>
+									<a href={`/notes/${post.id}/`}>
+										{post.data.heroImage && (
+											<div class="thumb">
+												<Image width={200} height={120} src={post.data.heroImage} alt="" />
+											</div>
+										)}
+										<div class="post-content">
+											<h4 class="title">{post.data.title}</h4>
+											{post.data.description && (
+												<p class="description">
+													{post.data.description.length > 50
+														? post.data.description.slice(0, 50) + '...'
+														: post.data.description}
+												</p>
+											)}
+											<div class="meta">
+												<p class="date">
+													<FormattedDate date={post.data.pubDate} />
+												</p>
+												<span class="tag">{post.data.category}</span>
+											</div>
 										</div>
-									)}
-									<div class="post-content">
-										<h4 class="title">{post.data.title}</h4>
-										<p class="description">
-											{post.data.description.length > 50
-												? post.data.description.slice(0, 50) + '...'
-												: post.data.description}
-										</p>
-										<p class="date">
-											<FormattedDate date={post.data.pubDate} />
-										</p>
-									</div>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</section>
+			</div>
 		</main>
 		<Footer />
 	</body>
 </html>
+
+<script>
+	const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+	const items = document.querySelectorAll<HTMLLIElement>('li[data-category]');
+	const heading = document.getElementById('posts-heading');
+	const count = document.getElementById('posts-count');
+
+	buttons.forEach((button) => {
+		button.addEventListener('click', () => {
+			const filter = button.dataset.filter;
+			let shown = 0;
+
+			buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+			items.forEach((item) => {
+				const match = filter === 'all' || item.dataset.category === filter;
+				item.hidden = !match;
+				if (match) shown++;
+			});
+
+			if (heading) heading.textContent = filter === 'all' ? '最新文章' : (filter ?? '');
+			if (count) count.textContent = String(shown);
+		});
+	});
+</script>
